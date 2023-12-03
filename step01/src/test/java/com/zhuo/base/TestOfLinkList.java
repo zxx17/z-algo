@@ -1,6 +1,7 @@
 package com.zhuo.base;
 
 import com.zhuo.entity.ListNode;
+import com.zhuo.entity.Node;
 
 import java.util.*;
 
@@ -199,19 +200,86 @@ public class TestOfLinkList {
      * 递归
      */
     public ListNode trainningPlan3(ListNode l1, ListNode l2) {
-        if(l1 == null) {
+        if (l1 == null) {
             return l2;
-        }else if(l2 == null) {
+        } else if (l2 == null) {
             return l1;
-        }else if(l1.val < l2.val) {
+        } else if (l1.val < l2.val) {
             l1.next = trainningPlan3(l1.next, l2);
             return l1;
-        }else {
+        } else {
             l2.next = trainningPlan3(l1, l2.next);
             return l2;
         }
     }
 
+    /**
+     * 返回两个链表第一个相交的节点  要求O(n) O(1) 【非公共部分不相同】
+     * 双指针遍历
+     * 1 + 2 = 2 + 1
+     */
+    ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode he = headA;
+        ListNode she = headB;
+        while (he != she) {
+            he = he != null ? he.next : headB;
+            she = she != null ? she.next : headA;
+        }
+        return he;
+    }
+
+    /**
+     * 返回两个链表第一个相交的节点  非O(n) O(1) 【非公共部分不相同】
+     * 遍历
+     */
+    ListNode getIntersectionNode2(ListNode headA, ListNode headB) {
+        Set<ListNode> set = new HashSet<>();
+        ListNode cur = headA;
+        while (cur != null) {
+            set.add(cur);
+            cur = cur.next;
+        }
+        cur = headB;
+        while (cur != null) {
+            if (set.contains(cur)) {
+                return cur;
+            }
+            cur = cur.next;
+        }
+        return null;
+    }
+
+
+    /**
+     * 复制随机链表
+     */
+    public Node copyRandomList(Node head) {
+        if (head == null) {
+            return null;
+        }
+
+        // 创建原节点和复制节点的映射关系
+        Map<Node, Node> map = new HashMap<>();
+
+        // 第一次遍历：复制节点并建立映射关系
+        Node cur = head;
+        while (cur != null) {
+            Node copy = new Node(cur.val);
+            map.put(cur, copy);
+            cur = cur.next;
+        }
+
+        // 第二次遍历：连接复制节点的 next 和 random 指针
+        cur = head;
+        while (cur != null) {
+            Node copy = map.get(cur);
+            copy.next = map.get(cur.next);
+            copy.random = map.get(cur.random);
+            cur = cur.next;
+        }
+
+        return map.get(head);
+    }
 
 }
 
