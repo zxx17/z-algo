@@ -1,9 +1,6 @@
 package com.zhuo.base;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Xinxuan Zhuo
@@ -75,7 +72,7 @@ public class TestOfArray {
 
 
     /**
-     * 按规则计算统计结果 TODO
+     * 按规则计算统计结果 Done
      * <p>
      * 为了深入了解这些生物群体的生态特征，你们进行了大量的实地观察和数据采集。数组 arrayA 记录了各个生物群体数量数据，其中 arrayA[i] 表示第 i 个生物群体的数量。请返回一个数组 arrayB，该数组为基于数组 arrayA 中的数据计算得出的结果，其中 arrayB[i] 表示将第 i 个生物群体的数量从总体中排除后的其他数量的乘积。
      * <p>
@@ -84,26 +81,62 @@ public class TestOfArray {
      */
     public static int[] calculate(int[] arrayA) {
         int n = arrayA.length;
-        int[] left = new int[n];
-        int[] right = new int[n];
-        left[0] = 1;
-        right[n - 1] = 1;
-
-        for (int i = 1; i < n; i++) {
-            left[i] = left[i - 1] * arrayA[i - 1];
+        int total = 1; // 计算总乘积
+        int zeroCount = 0; // 统计值为0的生物群体数量个数
+        for (int i = 0; i < n; i++) {
+            if (arrayA[i] != 0) {
+                total *= arrayA[i];
+            } else {
+                zeroCount++;
+            }
         }
-
-        for (int i = n - 2; i >= 0; i--) {
-            right[i] = right[i + 1] * arrayA[i + 1];
-        }
-
         int[] arrayB = new int[n];
         for (int i = 0; i < n; i++) {
-            arrayB[i] = left[i] * right[i];
+            if (zeroCount == 0) {
+                arrayB[i] = total / arrayA[i]; // 排除当前生物群体数量后的其他数量的乘积
+            } else if (zeroCount == 1 && arrayA[i] == 0) {
+                arrayB[i] = total; // 只有一个值为0的生物群体数量，排除该生物群体后，其他数量的乘积为total
+            } else {
+                arrayB[i] = 0; // 多于一个值为0的生物群体数量，其他数量的乘积为0
+            }
         }
-
         return arrayB;
     }
+
+    /**
+     * 寻找文件副本
+     * 设备中存有 n 个文件，文件 id 记于数组 documents。若文件 id 相同，则定义为该文件存在副本。请返回任一存在副本的文件 id。
+     * <p>
+     * 输入：documents = [2, 5, 3, 0, 5, 0]
+     * 输出：0 或 5
+     */
+    public int findRepeatDocument(int[] documents) {
+        Arrays.sort(documents);
+        for (int i = 0; i < documents.length - 1; i++) {
+            if (documents[i] == documents[i + 1]) {
+                return documents[i];
+            }
+        }
+        return -1; // 如果没有找到重复数字，返回一个合适的值
+    }
+    public int findRepeatDocument2(int[] documents) {
+        Set<Integer> container = new HashSet<>();
+        for(int num: documents){
+            if(container.contains(num)){
+                return num;
+            }
+            container.add(num);
+        }
+        return -1;
+    }
+
+
+    /**
+     * 螺旋遍历二维数组
+     * 根据题目示例 array = [[1,2,3],[4,5,6],[7,8,9]] 的对应输出 [1,2,3,6,9,8,7,4,5]
+     */
+
+
 
 
 }
