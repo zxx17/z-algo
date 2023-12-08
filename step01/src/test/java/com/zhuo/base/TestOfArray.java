@@ -119,10 +119,11 @@ public class TestOfArray {
         }
         return -1; // 如果没有找到重复数字，返回一个合适的值
     }
+
     public int findRepeatDocument2(int[] documents) {
         Set<Integer> container = new HashSet<>();
-        for(int num: documents){
-            if(container.contains(num)){
+        for (int num : documents) {
+            if (container.contains(num)) {
                 return num;
             }
             container.add(num);
@@ -135,8 +136,46 @@ public class TestOfArray {
      * 螺旋遍历二维数组
      * 根据题目示例 array = [[1,2,3],[4,5,6],[7,8,9]] 的对应输出 [1,2,3,6,9,8,7,4,5]
      */
+    public int[] spiralArray(int[][] array) {
+        if (array == null) {
+            return new int[0];
+        }
+        int left = 0, right = array[0].length - 1, top = 0, under = array.length - 1;
+        int index = 0;
+        int[] res = new int[array.length * array[0].length];
 
-
+        while (true) {
+            //left -> right
+            for (int i = left; i <= right; i++) {
+                res[index++] = array[top][i];
+            }
+            if (++top > under) {
+                break;
+            }
+            //top -> under
+            for (int i = top; i <= under; i++) {
+                res[index++] = array[i][right];
+            }
+            if (left > --right) {
+                break;
+            }
+            //right -> left
+            for (int i = right; i >= left; i--) {
+                res[index++] = array[under][i];
+            }
+            if (top > --under) {
+                break;
+            }
+            //under -> top
+            for (int i = under; i >= top; i--) {
+                res[index++] = array[i][left];
+            }
+            if (++left > right) {
+                break;
+            }
+        }
+        return res;
+    }
 
 
 }
