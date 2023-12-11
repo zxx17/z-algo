@@ -1,5 +1,7 @@
 package com.zhuo.base;
 
+import org.junit.Test;
+
 import java.util.LinkedList;
 
 /**
@@ -43,7 +45,7 @@ public class TestOfStr {
      * 输入: message = "the sky is blue"
      * 输出: "blue is sky the"
      */
-    public  String reverseMessage(String message) {
+    public String reverseMessage(String message) {
         message = message.trim();
         message += " ";
         LinkedList<String> container = new LinkedList<>();
@@ -68,20 +70,21 @@ public class TestOfStr {
         }
         return sb.toString();
     }
+
     /**
      * 双指针法
      */
-    public  String reverseMessage2(String message) {
+    public String reverseMessage2(String message) {
         message = message.trim();
-        int flag = message.length()-1, index = flag;
+        int flag = message.length() - 1, index = flag;
         StringBuilder sb = new StringBuilder();
 
-        while (index>=0){
-            while (index >= 0 && message.charAt(index) != ' '){
+        while (index >= 0) {
+            while (index >= 0 && message.charAt(index) != ' ') {
                 index--;
             }
-            sb.append(message.substring(index+1, flag+1)).append(' ');
-            while (index>=0&&message.charAt(index) == ' '){
+            sb.append(message.substring(index + 1, flag + 1)).append(' ');
+            while (index >= 0 && message.charAt(index) == ' ') {
                 index--;
             }
             flag = index;
@@ -91,20 +94,20 @@ public class TestOfStr {
 
     /**
      * 某公司门禁密码使用动态口令技术。初始密码为字符串 password，密码更新均遵循以下步骤：
-     *
+     * <p>
      * 设定一个正整数目标值 target
      * 将 password 前 target 个字符按原顺序移动至字符串末尾
-     *
+     * <p>
      * 输入: password = "s3cur1tyC0d3", target = 4
      * 输出: "r1tyC0d3s3cu"
-     * */
+     */
     public static String dynamicPassword1(String password, int target) {
         StringBuilder sb = new StringBuilder();
 
         String goLast = password.substring(0, target);
         String goFirst = password.substring(target);
 
-       sb.append(goFirst).append(goLast);
+        sb.append(goFirst).append(goLast);
 
         return sb.toString();
     }
@@ -123,11 +126,12 @@ public class TestOfStr {
         }
         return sb.toString();
     }
+
     /**
      * 若面试规定只能用String
      **/
     public static String dynamicPassword3(String password, int target) {
-       String res = "";
+        String res = "";
         for (int i = target; i < password.length(); i++) {
             res += password.charAt(i);
         }
@@ -139,9 +143,10 @@ public class TestOfStr {
     }
 
     /**
+     * AAAAAA
      * 不使用库函数的字符串转整数
      */
-    public  static int myAtoi(String s) {
+    public static int myAtoi(String s) {
         if (s == null || s.length() == 0) return 0;
 
         int index = 0, sign = 1, total = 0;
@@ -171,9 +176,106 @@ public class TestOfStr {
         return total * sign;
     }
 
+    /**
+     * AAAAAA
+     * 有效数字
+     * <p>
+     * 有效数字（按顺序）可以分成以下几个部分：
+     * <p>
+     * 若干空格
+     * 一个 小数 或者 整数
+     * （可选）一个 'e' 或 'E' ，后面跟着一个 整数
+     * 若干空格
+     * 小数（按顺序）可以分成以下几个部分：
+     * <p>
+     * （可选）一个符号字符（'+' 或 '-'）
+     * 下述格式之一：
+     * 至少一位数字，后面跟着一个点 '.'
+     * 至少一位数字，后面跟着一个点 '.' ，后面再跟着至少一位数字
+     * 一个点 '.' ，后面跟着至少一位数字
+     * 整数（按顺序）可以分成以下几个部分：
+     * <p>
+     * （可选）一个符号字符（'+' 或 '-'）
+     * 至少一位数字
+     * 部分有效数字列举如下：["2", "0089", "-0.1", "+3.14", "4.", "-.9", "2e10", "-90E3", "3e+7", "+6e-1", "53.5e93", "-123.456e789"]
+     * <p>
+     * 部分无效数字列举如下：["abc", "1a", "1e", "e3", "99e2.5", "--6", "-+3", "95a54e53"]
+     * <p>
+     * 给你一个字符串 s ，如果 s 是一个 有效数字 ，请返回 true 。
+     */
+    public static boolean validNumber(String s) {
+        if (s == null || s.length() == 0) {
+            return false;
+        }
+        // 去除前导和尾部空格
+        s = s.trim();
+        if (s.length() == 0) {
+            return false;
+        }
+
+        // 判断空格部分
+        int start = 0;
+        if (s.charAt(start) == '+' || s.charAt(start) == '-') {
+            start++;
+        }
+
+        // 判断小数或整数部分
+        int dotCount = 0;
+        int digitCount = 0;
+        while (start < s.length() && (Character.isDigit(s.charAt(start)) || s.charAt(start) == '.')) {
+            if (Character.isDigit(s.charAt(start))) {
+                digitCount++;
+            }
+            if (s.charAt(start) == '.') {
+                dotCount++;
+            }
+            start++;
+        }
+        //小数点大于1位 整数小于1位
+        if (dotCount > 1 || digitCount < 1) {
+            return false;
+        }
+
+        // 判断指数部分
+        if (start < s.length() && (s.charAt(start) == 'e' || s.charAt(start) == 'E')) {
+            start++;
+            //符号计数
+            if (start < s.length() && (s.charAt(start) == '+' || s.charAt(start) == '-')) {
+                start++;
+            }
+            int expDigitCount = 0;
+            while (start < s.length() && Character.isDigit(s.charAt(start))) {
+                expDigitCount++;
+                start++;
+            }
+            if (expDigitCount < 1) {
+                return false;
+            }
+        }
+
+        // 判断空格部分
+        while (start < s.length() && s.charAt(start) == ' ') {
+            start++;
+        }
+        return start == s.length();
+    }
+
+    /**
+     * 将条件判断分为三个部分：空格、小数或整数、空格。这样可以更好地符合有效数字的要求。
+     *
+     * 在小数部分的判断中，添加了对小数点前后数字的判断。
+     *
+     * 在整数部分的判断中，添加了对指数部分的判断，包括指数后面必须跟着整数、指数前后不能缺失。
+     *
+     * 返回结果时，只要指数出现的次数不超过1次，就可以判断为有效数字。
+     */
+    @Test
+    public void  testValidNumber(){
+        System.out.println(validNumber("e9"));
+    }
 
 
- }
+}
 
 
 
