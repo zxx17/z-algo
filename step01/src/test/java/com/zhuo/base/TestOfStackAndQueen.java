@@ -288,47 +288,32 @@ public class TestOfStackAndQueen {
     }
 
     class MedianFinder {
-        private PriorityQueue<Integer> minHeap;
-        private PriorityQueue<Integer> maxHeap;
-
-        /** initialize your data structure here. */
+        Queue<Integer> A, B;
         public MedianFinder() {
-            minHeap = new PriorityQueue<>();
-            maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+            A = new PriorityQueue<>(); // 小顶堆，保存较大的一半
+            B = new PriorityQueue<>((x, y) -> (y - x)); // 大顶堆，保存较小的一半
         }
-
         public void addNum(int num) {
-            if (maxHeap.isEmpty() || num <= maxHeap.peek()) {
-                maxHeap.add(num);
+            if(A.size() != B.size()) {
+                A.add(num);
+                B.add(A.poll());
             } else {
-                minHeap.add(num);
-            }
-
-            // 平衡两个堆的大小
-            if (maxHeap.size() > minHeap.size() + 1) {
-                minHeap.add(maxHeap.poll());
-            } else if (minHeap.size() > maxHeap.size()) {
-                maxHeap.add(minHeap.poll());
+                B.add(num);
+                A.add(B.poll());
             }
         }
-
-        public double findMedian(){
-            if (maxHeap.size() > minHeap.size()) {
-                return maxHeap.peek();
-            } else {
-                return (maxHeap.peek() + minHeap.peek()) / 2.0;
-            }
+        public double findMedian() {
+            return A.size() != B.size() ? A.peek() : (A.peek() + B.peek()) / 2.0;
         }
     }
 
-    @Test
-    public void testMedianFinder(){
-        MedianFinder medianFinder = new MedianFinder();
-        medianFinder.addNum(2);
-        medianFinder.addNum(3);
-        System.out.println(medianFinder.findMedian());
-
-    }
+//    @Test
+//    public void testMedianFinder(){
+//        MedianFinder medianFinder = new MedianFinder();
+//        medianFinder.addNum(2);
+//        medianFinder.addNum(3);
+//        System.out.println(medianFinder.findMedian());
+//    }
 
 
 
